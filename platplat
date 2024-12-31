@@ -1,37 +1,26 @@
-local UIS = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
 
-local isClimbing = false
+-- Create ScreenGui and Button
+local screenGui = Instance.new("ScreenGui")
+local button = Instance.new("TextButton")
 
-local tracker = nil
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
-UIS.InputBegan:Connect(function(input,gpe)
-	if gpe then return end
-	
-	if(input.KeyCode == Enum.KeyCode.F6) then
-		isClimbing = true
-		
-		if(tracker) then
-			tracker:Destroy()
-		end
-		
-		local instance = Instance.new("Part")
-		
-		tracker = instance
-		
-		while isClimbing do
-			wait()
-			instance.Parent = workspace
-			instance.Position = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0,-5,0)
-			instance.Anchored = true
-			
-		end
-	end
-end)
+button.Parent = screenGui
+button.Size = UDim2.new(0, 100, 0, 50) -- Button size
+button.Position = UDim2.new(0.8, -800, 0, 60) -- Button position
+button.Text = "Big Body hipheight"
+button.BackgroundColor3 = Color3.new(0.5, 0.5, 1)
 
-UIS.InputEnded:Connect(function(input,gpe)
-	if gpe then return end
+-- Variables to toggle HipHeight
+local toggleState = false
+local hipHeight1 = 3.4
+local hipHeight2 = 3.32
 
-	if(input.KeyCode == Enum.KeyCode.F8) then
-		isClimbing = false
-	end
+-- Button click event
+button.MouseButton1Click:Connect(function()
+    toggleState = not toggleState
+    humanoid.HipHeight = toggleState and hipHeight1 or hipHeight2
 end)
